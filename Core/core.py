@@ -1,18 +1,24 @@
 # 20:15:05:11:32:44 - itead - radar
 # 30:14:11:21:15:80 - HC-06 - redbot
-from bluetooth import *
 import time
+from bluetooth import *
+import matplotlib.pyplot as plt
 
 # Generate the master table
-masterTable = [[0 for x in range(10)] for x in range(10)] 
+# masterTable = [[0 for x in range(10)] for x in range(10)] 
+all_results_x = list()
+all_results_y = list()
 
 WAIT_TIME = 10
+RADAR_MAC = "20:15:05:11:32:44"
+REDBOT_MAC = "30:14:11:21:15:80"
+ITERATIONS_AMOUNT = 3
 
 def scan():
 	# Connect
 	print "Connecting to Radar"
 	sock=BluetoothSocket( RFCOMM )
-	sock.connect(("20:15:05:11:32:44", 1))
+	sock.connect((RADAR_MAC, 1))
 
 	# Send data and wait for output
 	res = sock.send('r')
@@ -46,10 +52,10 @@ def scan():
 def move(direction):
 	print "Connecting to Redbot"
 	sock=BluetoothSocket( RFCOMM )
-	sock.connect(("30:14:11:21:15:80", 1))
+	sock.connect((REDBOT_MAC, 1))
 
 	# Send data and wait for output
-	res = sock.send(direction)
+	res = sock.send("go")
 	# data = ""
 	# while True:
 	# 	data += sock.recv(1024)
@@ -60,17 +66,43 @@ def move(direction):
 	
 	# Output result and close connection
 	sock.close()
-	
+
+def stopRedBot():
+	sock=BluetoothSocket( RFCOMM )
+	sock.connect((REDBOT_MAC, 1))
+
+	# Send data and wait for output
+	res = sock.send("stop")
+	sock.close()
+
 
 def calculateMove(coordinates):
-	return 'd'
 	pass
 
-# Waits for 30 seconds
 def wait():
 	print "Waiting..."
 	time.sleep(WAIT_TIME)
 
-while True:
-	move(calculateMove(scan()))
-	wait()
+def saveToMasterList(x,y):
+	all_results_x.append(x)
+	all_results_y.append(y)
+
+def generateGraph():
+	area = 3.1416 * 10 ** 2
+	plt.scatter(all_results_x, all_results_y, s=area, alpha=0.5)
+	plt.show()
+
+
+# Main iteration 
+for item in range(0,ITERATIONS_AMOUNT):
+
+	# stopRedBot()
+	res = scan()
+	if res:
+		print res[0]
+		saveToMasterList(res[0]["x"], res[0]["y"])
+	# move()
+	# wait()
+
+generateGraph()
+
