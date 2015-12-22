@@ -4,9 +4,6 @@
 #define SPEED 60  // sets the nominal speed. Set to any number from 0 - 255.
 
 RedBotMotors motors;
-boolean s1 = true;
-boolean s2 = true;
-boolean s3 = true;
 int leftSpeed;   // variable used to store the leftMotor speed
 int rightSpeed;  // variable used to store the rightMotor speed
 RedBotSensor left = RedBotSensor(A3);   // initialize a left sensor object on A3
@@ -102,9 +99,9 @@ void loop()
 
 
  
-// if(Serial.available())
- //{
-  //Serial.println("Goodnight moon!");
+ if(Serial.available())
+ {
+ 
   int l = left.read();
   int r = right.read();
   int c = center.read();
@@ -124,7 +121,7 @@ void loop()
   moveLeft(resL);
   moveRight(resR);
   Serial.println(resL);
-  //Serial.println(resR);
+  Serial.println(resR);
 
 
   delay(100);//let move for some time then stop
@@ -134,7 +131,7 @@ void loop()
   brainL.train(eval(l, c, r), resL);
   brainR.train(eval(r, c, l), resR);
 
- //}
+ }
 }
 
 
@@ -154,26 +151,22 @@ int eval(int l, int c, int r) {
 void moveLeft(char d) {
   leftSpeed = -(SPEED - 50);
   if (d > 0) {
-    //Serial.println(d);
-    motors.drive(-80);
     
+    motors.leftDrive(-255);
+    motors.leftMotor(80); // Turn on left motor counter clockwise medium power (motorPower = 150)     
   delay(1000);       // for 1000 ms.
   } else {
-    //motors.leftMotor(100);//180
-    //motors.rightMotor(150); // Turn on right motor clockwise medium power (motorPower = 150) 
-    motors.leftDrive(-255);
-    motors.leftMotor(80); // Turn on left motor counter clockwise medium power (motorPower = 150) 
+    motors.drive(80);    //motors.rightMotor(150); // Turn on right motor clockwise medium power (motorPower = 150) 
+
   }
 }
 
 void moveRight(char d) {
    rightSpeed = SPEED - 50;
   if (d > 0) {
-    //motors.rightMotor(-100);//180
-    //motors.drive(-255);
     motors.rightDrive(-255);
     motors.rightMotor(80); // Turn on right motor clockwise medium power (motorPower = 150) 
-    //motors.leftMotor(-150); // Turn on left motor counter clockwise medium power (motorPower = 150) 
+    
   } else {
    motors.drive(80);
   }
@@ -184,3 +177,4 @@ void stopRedbot() {
   motors.brake();
 
 }
+
