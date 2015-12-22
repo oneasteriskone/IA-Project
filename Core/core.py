@@ -6,10 +6,11 @@ import time
 # Generate the master table
 masterTable = [[0 for x in range(10)] for x in range(10)] 
 
+WAIT_TIME = 10
 
 def scan():
 	# Connect
-	print "Connecting to ITEAD"
+	print "Connecting to Radar"
 	sock=BluetoothSocket( RFCOMM )
 	sock.connect(("20:15:05:11:32:44", 1))
 
@@ -42,18 +43,34 @@ def scan():
 	sock.close()
 	return table
 
-def move():
-	pass
+def move(direction):
+	print "Connecting to Redbot"
+	sock=BluetoothSocket( RFCOMM )
+	sock.connect(("30:14:11:21:15:80", 1))
 
-def calculateMove():
+	# Send data and wait for output
+	res = sock.send(direction)
+	# data = ""
+	# while True:
+	# 	data += sock.recv(1024)
+	# 	if data is "1" or data is "0" :
+	# 		break
+
+	# Parse result
+	
+	# Output result and close connection
+	sock.close()
+	
+
+def calculateMove(coordinates):
+	return 'd'
 	pass
 
 # Waits for 30 seconds
 def wait():
-	print "Waiting for 30 secs..."
-	time.sleep(30)
-
+	print "Waiting..."
+	time.sleep(WAIT_TIME)
 
 while True:
-	scan()
+	move(calculateMove(scan()))
 	wait()
