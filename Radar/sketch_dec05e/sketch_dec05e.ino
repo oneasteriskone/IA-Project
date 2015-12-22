@@ -1,10 +1,9 @@
-#include <Servo.h>. 
+#include <Servo.h>
 #include <SoftwareSerial.h>
-SoftwareSerial BT(5 ,6); 
+SoftwareSerial BT(5,6); 
  
-const int trigPin = 11;
-const int echoPin = 10;
-const int bluePin  = 12;
+const int trigPin = 10;
+const int echoPin = 11;
 
 long duration;
 int distance;
@@ -14,7 +13,6 @@ Servo myServo;
 void setup() {
   pinMode(trigPin, OUTPUT); 
   pinMode(echoPin, INPUT); 
-  pinMode(bluePin, OUTPUT);
   
   BT.begin(9600);
   //Serial.begin(9600); //Used for debug
@@ -30,20 +28,22 @@ char b; // Stores the character for bluetooth
 void loop() {
   if(BT.available()){
     b = (BT.read());
-    if(b == 'r'){
-      myServo.write(0);  
-      BT.println("Moving right");
-    }  
-    if(b == 'l'){
-      myServo.write(90);
-      BT.println("Moving left");  
-    }
-    if(b == 's'){
-        BT.println(calculateDistance());
-    }
-    if (b=='?'){
-      BT.println("r = Right ; l = Left ; s = Ultrasonic BEAAAM");
-    }   
+    myServo.write((int) b);  
+      BT.println((int) b );
+//    if(b == 'r'){
+//      myServo.write(0);  
+//      BT.println("Moving right");
+//    }  
+//    if(b == 'l'){
+//      myServo.write(90);
+//      BT.println("Moving left");  
+//    }
+//    if(b == 's'){
+//        BT.println(calculateDistance());
+//    }
+//    if (b=='?'){
+//      BT.println("r = Right ; l = Left ; s = Ultrasonic BEAAAM");
+//    }   
   }
 }
  
