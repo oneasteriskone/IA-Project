@@ -8,4 +8,4 @@ Adding files for the IA project.
 
 # RedBot
 
-__Missing__
+![Redbot1](https://raw.githubusercontent.com/oneasteriskone/IA-Project/master/Redbot/redbot1.jpeg)
